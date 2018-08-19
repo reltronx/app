@@ -38,7 +38,12 @@
   position: absolute;
   width: 100%;
   height: 200px;
+<<<<<<< HEAD
   z-index: 1;
+=======
+  z-index: -1;
+  right: 0;
+>>>>>>> 4d36bd3fc3fc9e265d895d3378b9fecb0c2cc9c4
 }
 
 .canvas-edit-mode {
