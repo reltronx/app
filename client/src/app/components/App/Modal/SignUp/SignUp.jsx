@@ -65,7 +65,7 @@ class SignUp extends React.Component {
 
   submitSignUpUser(event, mail, name, userType, password, requiresGuardianConsent, guardianEmail) {
     if (this.passwordMatch(this.password.value, this.passwordConfirm.value)) {
-      axios.post('/users/signup', {
+      axios.post('/auth/signup', {
         mail,
         name,
         userType,

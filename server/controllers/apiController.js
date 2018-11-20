@@ -3,8 +3,6 @@ const express = require('express');
 const multer = require('multer');
 const shortid = require('shortid');
 
-
-const Folder = require('../models/folder.js');
 const Page = require('../models/page.js');
 const User = require('../models/user.js');
 
@@ -58,45 +56,6 @@ function uploadFiles(req, res) {
   });
 }
 
-function getSketches(req, res) {
-  // TODO: make the request async
-  if (!req.params.user) {
-    if (!req.user) {
-      res.status(403).send({ error: 'Please log in first or specify a user' });
-      return;
-    }
-  }
-  let user = req.user;
-  if (req.params.user) {
-    User.findOne({ name: req.params.user }, (userFindError, data) => {
-      if (userFindError) {
-        res.status(404).send({ error: userFindError });
-      } else if (data.type === 'student') {
-        res.status(403).send({ error: 'This users data cannot be accessed' });
-      } else {
-        user = data;
-        Promise.all([
-          Page.find({ user: user._id }).exec(),
-          Folder.find({ user: user._id }).exec()
-        ])
-          .then(([pages, folders]) => {
-            res.send({ pages, folders });
-          })
-          .catch(err => res.send(err));
-      }
-    });
-  } else {
-    Promise.all([
-      Page.find({ user: user._id }).exec(),
-      Folder.find({ user: user._id }).exec()
-    ])
-      .then(([pages, folders]) => {
-        res.send({ pages, folders });
-      })
-      .catch(err => res.send(err));
-  }
-}
-
 function getExamples(req, res) {
   User.find({ name: 'peblioexamples' }, (userFindError, user) => {
     if (userFindError) {
@@ -116,7 +75,5 @@ function getExamples(req, res) {
 const apiRoutes = express.Router();
 apiRoutes.route('/examples').get(getExamples);
 apiRoutes.route('/authenticate/:id').get(authenticatePage);
-apiRoutes.route('/sketches').get(getSketches);
-apiRoutes.route('/sketches/:user').get(getSketches);
 apiRoutes.route('/upload/:user/:type').get(uploadFiles);
 module.exports = apiRoutes;

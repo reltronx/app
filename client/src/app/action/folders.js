@@ -35,15 +35,14 @@ export function fetchAllPages(profileName) {
   //  - refactor this route to be something like /api/users/:userName/sketches
   //  - don't use two different routes for fetching pages for the current user vs. other users
   return (dispatch, getState) => {
-    let url = '/sketches';
+    let name = '';
     if (profileName) {
-      url = `${url}/${profileName}`;
+      name = profileName;
     } else {
       const { user } = getState();
-      if (!user.name) {
-        return false;
-      }
+      name = user.name;
     }
+    const url = `/users/${name}/sketches`;
     return axios.get(url)
       .then(({ data }) => dispatch({
         type: ActionTypes.SET_ALL_PAGES,

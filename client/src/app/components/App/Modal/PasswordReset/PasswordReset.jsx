@@ -18,6 +18,10 @@ class PasswordReset extends React.Component {
     this.resetResponse = this.resetResponse.bind(this);
   }
 
+  componentWillUnmount() {
+    history.push('/');
+  }
+
   passwordMatch(a, b) {
     return (a === b);
   }
@@ -44,7 +48,7 @@ class PasswordReset extends React.Component {
 
   submitResetPassword(event, password, token) {
     if (this.passwordMatch(this.password.value, this.passwordConfirm.value)) {
-      axios.post('/users/reset', {
+      axios.post('/auth/reset_password', {
         password,
         token
       })
@@ -67,7 +71,6 @@ class PasswordReset extends React.Component {
         <form
           onSubmit={(event) => {
             this.submitResetPassword(event, this.password.value, this.resetToken());
-            history.push('/');
           }}
         >
           <div className="reset-modal__div">
@@ -96,11 +99,9 @@ class PasswordReset extends React.Component {
             </button>
           </div>
         </form>
-        {this.state.showNotice && (
-          <p className="forgot-modal__notice">
-            {this.state.notice}
-          </p>
-        )}
+        <p className="forgot-modal__notice">
+          {this.state.notice}
+        </p>
       </div>
     );
   }

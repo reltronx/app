@@ -4,7 +4,6 @@ const { User } = require('../models');
 
 mongoose.Promise = Promise;
 
-console.log('Updating db...');
 mongoose
   .connect(process.env.MONGO_DB_PEBLIO, { useMongoClient: true })
   .then(() => User.update(
@@ -17,7 +16,6 @@ mongoose
         return process.exit(1);
       }
 
-      console.log('Done!');
       return process.exit(0);
-    }).exec()
-  );
+    }
+  ).exec());

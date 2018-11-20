@@ -5,7 +5,6 @@ const { Folder } = require('../models');
 
 mongoose.Promise = Promise;
 
-console.log('Updating db...');
 mongoose.connect(process.env.MONGO_DB_PEBLIO, { useMongoClient: true })
   .then(() => Folder.find({ shortId: { $exists: false } }).exec())
   .then(folders => Promise.all(folders.map((folder) => {
@@ -13,7 +12,6 @@ mongoose.connect(process.env.MONGO_DB_PEBLIO, { useMongoClient: true })
     return folder.save();
   })))
   .then(() => {
-    console.log('Done!');
     process.exit(0);
   })
   .catch((err) => {
