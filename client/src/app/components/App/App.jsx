@@ -123,6 +123,7 @@ class App extends React.Component {
     this.props.fetchCurrentUser()
       .then(() => {
         this.props.fetchUserPreferences();
+        this.props.fetchAllPages();
       });
   }
 
