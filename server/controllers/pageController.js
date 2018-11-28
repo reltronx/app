@@ -109,7 +109,7 @@ async function movePage(req, res) {
   }
 }
 
-function getForkedFrom(req, res) {
+function getParentId(req, res) {
   const pageId = req.params.pageId;
   Page.findOne({ id: pageId }, (pageFindError, pageData) => {
     if (pageFindError) {
@@ -117,25 +117,24 @@ function getForkedFrom(req, res) {
     } else {
       parentPageId = pageData.parentId;
       Page.findOne({ id: parentPageId }, (parentPageFindError, parentPageData) => {
-        if (parentPageFindError) {
+        if (parentPageFindError || !parentPageData) {
           res.status(404).send({ error: parentPageFindError });
         } else {
           return res.status(500).send({
             parentId: parentPageId,
-            user: parentPageData.user
+            userId: parentPageData.user
           });
         }
       });
     }
   });
-
-  return res.status(500).send({ msg: 'hi' });
 }
+
 
 const pageRoutes = express.Router();
 pageRoutes.route('/:pageId/move').post(movePage);
 pageRoutes.route('/:pageId').get(getPage);
-pageRoutes.route('/:pageId/forkedfrom').get(getForkedFrom);
+pageRoutes.route('/:pageId/parent').get(getParentId);
 pageRoutes.route('/save').post(savePage);
 pageRoutes.route('/saveAsGuest').post(savePageAsGuest);
 pageRoutes.route('/update').post(updatePage);

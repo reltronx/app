@@ -435,6 +435,19 @@ function getUserProfile(req, res) {
   });
 }
 
+function getUserName(req, res) {
+  const userId = req.params.userId;
+  User.findOne({ _id: userId }, (userError, userData) => {
+    if (userError) {
+      res.status(404).send({ error: userError });
+    } else {
+      res.status(500).send({
+        name: userData.name
+      });
+    }
+  });
+}
+
 const userRoutes = express.Router();
 userRoutes.route('/login').post(loginUser);
 userRoutes.route('/signup').post(createUser);
@@ -446,4 +459,5 @@ userRoutes.route('/login/google').post(loginWithGoogle);
 userRoutes.route('/preferences').post(updatePreferences);
 userRoutes.route('/preferences').get(getUserPreferences);
 userRoutes.route('/:userName/profile').get(getUserProfile);
+userRoutes.route('/:userId/name').get(getUserName);
 module.exports = userRoutes;
